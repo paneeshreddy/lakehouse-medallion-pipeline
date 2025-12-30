@@ -1,0 +1,6 @@
+def ingest_bronze():
+    print("Bronze layer ingestion started")
+
+if __name__ == "__main__":
+    ingest_bronze()
+
