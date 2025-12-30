@@ -7,10 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - run: pip install -r requirements.txt pytest
+
+      # Create demo input data (because data/ is ignored and not in the repo)
+      - name: Create sample raw data
+        run: |
+          mkdir -p data/raw
+          cat > data/raw/sample.csv << 'EOF'
+          id,name,amount
+          1,Alice,100
+          2,Bob,200
+          3,,300
+          EOF
+
       - run: python src/bronze/ingest_bronze.py
       - run: python src/silver/transform_silver.py
+      - run: python src/gold/build_gold.py
       - run: pytest -q
+
